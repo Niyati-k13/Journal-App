@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+.env
+.env.local
+.DS_Store
+*.log
+client/node_modules
+client/dist
+server/node_modules
+.codex
+*.codex
+.pytest_cache
+pytest-cache-files-*
+.venv
+ai-service/.venv
