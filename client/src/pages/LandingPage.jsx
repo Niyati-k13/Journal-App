@@ -1,103 +1,180 @@
 import { Link } from "react-router-dom";
 
 const features = [
-  "Private journaling with secure accounts and role-based access",
-  "Mood tracking, trend charts, streaks, badges, and supportive prompts",
-  "Optional AI-assisted mood detection with user-controlled final mood choices",
-  "Gentle self-care suggestions and calm safety resource messaging"
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+    ),
+    label: "Private journaling",
+    desc: "Your entries are encrypted and visible only to you — always.",
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    ),
+    label: "Mood tracking",
+    desc: "Spot emotional patterns across days and weeks without guessing.",
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+      </svg>
+    ),
+    label: "Streaks & prompts",
+    desc: "Gentle reminders that encourage consistency, never demand it.",
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><path d="M18 2l4 4-4 4"/><path d="M22 6h-6"/>
+      </svg>
+    ),
+    label: "AI-assisted insights",
+    desc: "Optional mood detection powered by AI — you stay in control.",
+  },
 ];
+
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen overflow-hidden px-4 py-6 md:px-8">
-      <div className="mx-auto max-w-7xl">
-        <header className="surface-card relative overflow-hidden bg-hero-glow">
-          <div className="absolute -left-12 top-0 h-56 w-56 rounded-full bg-orange-300/25 blur-3xl" />
-          <div className="absolute right-0 top-10 h-64 w-64 rounded-full bg-rose-300/20 blur-3xl" />
-          <div className="relative grid gap-10 px-2 py-8 lg:grid-cols-[1.15fr_0.85fr] lg:px-6">
-            <div className="space-y-6">
-              <div className="badge-pill">Supportive journaling for students and working adults</div>
-              <div>
-                <h1 className="max-w-3xl text-5xl font-semibold leading-tight text-stone-900 md:text-6xl">
-                  A warm digital home for reflection, mood awareness, and steady habits.
-                </h1>
-                <p className="mt-5 max-w-2xl text-lg text-stone-600">
-                  Well-Being Journal helps people write privately, notice emotional patterns, and build
-                  a gentler rhythm of care through prompts, streaks, insights, and mood-aware support.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Link to="/signup" className="btn-primary">
-                  Create account
-                </Link>
-                <Link to="/login" className="btn-secondary">
-                  Log in
-                </Link>
-              </div>
-              <p className="text-sm text-stone-500">
-                This app is a supportive well-being tool only. It is not therapy, diagnosis, or emergency intervention.
-              </p>
-            </div>
+    <div className="min-h-screen flex flex-col">
 
-            <div className="surface-card-muted border-none bg-white/75 p-6">
-              <p className="gradient-title text-3xl">Today’s reflection could begin with:</p>
-              <div className="mt-6 rounded-[28px] bg-white p-5 shadow-soft">
-                <p className="text-sm uppercase tracking-[0.24em] text-stone-400">Guided prompt</p>
-                <p className="mt-3 text-lg font-medium text-stone-800">
-                  What helped you feel even a little more grounded today?
-                </p>
-              </div>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[28px] bg-orange-50 p-4">
-                  <p className="text-sm font-semibold text-stone-700">Mood trends</p>
-                  <p className="mt-2 text-sm text-stone-500">Spot patterns across days and weeks instead of guessing.</p>
-                </div>
-                <div className="rounded-[28px] bg-rose-50 p-4">
-                  <p className="text-sm font-semibold text-stone-700">Streak rewards</p>
-                  <p className="mt-2 text-sm text-stone-500">Celebrate consistency with badges that feel encouraging, not demanding.</p>
-                </div>
-              </div>
-            </div>
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50" style={{ background: "oklch(var(--bg))", borderBottom: "1px solid oklch(var(--line) / 0.35)" }}>
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-8 py-5">
+          {/* Wordmark */}
+          <span className="gradient-title text-[1.1rem] font-semibold tracking-[-0.01em]">Well-Being</span>
+
+          {/* Nav links + CTA */}
+          <div className="flex items-center gap-7">
+            <Link to="/helper-portal" className="btn-secondary hidden sm:inline-flex items-center gap-2 text-sm px-5 py-2.5">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+              Helpers
+            </Link>
+
+            <Link to="/login" className="btn-secondary text-sm px-5 py-2.5">
+              Log in
+            </Link>
+
+            <Link to="/signup" className="btn-primary text-sm px-5 py-2.5">
+              Get started
+            </Link>
           </div>
-        </header>
+        </div>
+      </nav>
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {features.map((feature) => (
-            <div key={feature} className="surface-card">
-              <p className="text-sm leading-6 text-stone-600">{feature}</p>
+      {/* Hero */}
+      <section className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-6 pt-28 pb-24 text-center overflow-hidden">
+        {/* Subtle glow blob */}
+        <div
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 50% at 50% -10%, oklch(var(--primary-soft) / 0.55), transparent)",
+          }}
+        />
+
+
+        <h1
+          className="max-w-3xl text-5xl font-semibold leading-[1.08] tracking-tight md:text-6xl lg:text-[4.5rem]"
+          style={{ color: "oklch(var(--text))" }}
+        >
+          A calmer way to
+          <br />
+          <span className="gradient-title">know yourself.</span>
+        </h1>
+
+        <p
+          className="mx-auto mt-6 max-w-lg text-lg leading-relaxed"
+          style={{ color: "oklch(var(--muted))" }}
+        >
+          Write privately, track your mood, and build gentle reflection habits — all in one quiet space.
+        </p>
+
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
+          <Link to="/signup" className="btn-primary px-8 py-3.5 text-base">
+            Start for free
+          </Link>
+          <Link to="/login" className="btn-secondary px-8 py-3.5 text-base">
+            Sign in
+          </Link>
+        </div>
+
+        <p className="mt-5 text-xs" style={{ color: "oklch(var(--muted) / 0.6)" }}>
+          Not therapy or diagnosis — a supportive tool for reflection.
+        </p>
+      </section>
+
+
+{/* Features */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-28">
+        <div className="mb-12 text-center">
+          <h2
+            className="text-3xl font-semibold tracking-tight"
+            style={{ color: "oklch(var(--text))" }}
+          >
+            Everything you need, nothing you don't
+          </h2>
+          <p className="mt-3 text-base theme-text-muted">
+            Thoughtfully designed to be simple, private, and genuinely helpful.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((f) => (
+            <div
+              key={f.label}
+              className="group relative flex flex-col gap-5 rounded-3xl border p-6 transition-shadow duration-200"
+              style={{
+                background: "oklch(var(--surface) / 0.85)",
+                borderColor: "oklch(var(--line) / 0.7)",
+                boxShadow: "0 2px 16px oklch(var(--text) / 0.04)",
+              }}
+            >
+              <div
+                className="flex h-11 w-11 items-center justify-center rounded-2xl"
+                style={{
+                  background: "oklch(var(--primary-soft))",
+                  color: "oklch(var(--primary))",
+                }}
+              >
+                {f.icon}
+              </div>
+              <div>
+                <p className="text-sm font-semibold theme-text">{f.label}</p>
+                <p className="mt-1.5 text-sm leading-6 theme-text-muted">{f.desc}</p>
+              </div>
             </div>
           ))}
-        </section>
+        </div>
+      </section>
 
-        <section className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="surface-card">
-            <h2 className="text-2xl font-semibold text-stone-900">Why this app exists</h2>
-            <p className="mt-4 text-sm leading-7 text-stone-600">
-              Paper journaling can be powerful, but it usually does not surface mood patterns, provide guided prompts,
-              or make it easy to maintain a reflection habit. This app combines private writing, emotional awareness,
-              and supportive routines in one calm experience.
-            </p>
+      {/* Footer */}
+      <footer
+        className="mt-auto border-t"
+        style={{ borderColor: "oklch(var(--line) / 0.45)" }}
+      >
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:justify-between">
+          <span className="gradient-title text-sm font-semibold">Well-Being</span>
+          <div className="flex items-center gap-6">
+            <Link to="/helper-portal" className="text-xs theme-text-faint transition-colors hover:theme-text-muted">
+              Helper portal
+            </Link>
+            <Link to="/login" className="text-xs theme-text-faint transition-colors hover:theme-text-muted">
+              Log in
+            </Link>
+            <Link to="/signup" className="text-xs theme-text-faint transition-colors hover:theme-text-muted">
+              Sign up
+            </Link>
           </div>
-          <div className="surface-card bg-gradient-to-br from-orange-50 via-white to-rose-50">
-            <h2 className="text-2xl font-semibold text-stone-900">What makes it different</h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-3">
-              <div>
-                <p className="font-semibold text-stone-700">Free reflection depth</p>
-                <p className="mt-2 text-sm text-stone-500">Combines mood logs and real writing, not just quick taps.</p>
-              </div>
-              <div>
-                <p className="font-semibold text-stone-700">Supportive insights</p>
-                <p className="mt-2 text-sm text-stone-500">Encouragement, prompts, streaks, and gentle suggestions work together.</p>
-              </div>
-              <div>
-                <p className="font-semibold text-stone-700">Privacy by default</p>
-                <p className="mt-2 text-sm text-stone-500">Admins see aggregates, and helpers only see entries shared with consent.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+          <p className="text-xs theme-text-faint hidden sm:block">© 2025 Well-Being</p>
+        </div>
+      </footer>
     </div>
   );
 }
-

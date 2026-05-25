@@ -1,7 +1,8 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { http } from "../../api/http";
 import { useAuth } from "../../hooks/useAuth";
 import { NotificationBar } from "../common/NotificationBar";
-import { ReminderBanner } from "../common/ReminderBanner";
 
 const navigationByRole = {
   user: [
@@ -9,19 +10,16 @@ const navigationByRole = {
     { label: "New Entry", to: "/app/journal/new" },
     { label: "History", to: "/app/history" },
     { label: "Analytics", to: "/app/analytics" },
+    { label: "Breathe", to: "/app/breathe" },
     { label: "Settings", to: "/app/settings" }
   ],
   admin: [
-    { label: "Dashboard", to: "/app/dashboard" },
-    { label: "New Entry", to: "/app/journal/new" },
-    { label: "History", to: "/app/history" },
-    { label: "Analytics", to: "/app/analytics" },
-    { label: "Settings", to: "/app/settings" },
-    { label: "Admin", to: "/app/admin" }
+    { label: "Admin", to: "/app/admin" },
+    { label: "Settings", to: "/app/settings" }
   ],
   helper: [
     { label: "Dashboard", to: "/app/dashboard" },
-    { label: "Helper", to: "/app/helper" },
+    { label: "Messages", to: "/app/helper" },
     { label: "Settings", to: "/app/settings" }
   ]
 };
@@ -30,23 +28,28 @@ export function AppShell() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigation = navigationByRole[user?.role] || navigationByRole.user;
+  const [needsJournal, setNeedsJournal] = useState(false);
+
+  useEffect(() => {
+    if (!user?.reminderEnabled) return;
+    http.get("/dashboard/summary")
+      .then(res => setNeedsJournal(res.data.reminder.needsAttention))
+      .catch(() => {});
+  }, [location.pathname, user?.reminderEnabled]);
 
   return (
     <div className="min-h-screen px-4 py-4 md:px-6">
-      <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[280px_1fr]">
-        <aside className="surface-card overflow-hidden bg-hero-glow">
-          <div className="rounded-4xl bg-gradient-to-br from-orange-100/70 via-white/70 to-rose-100/70 p-6">
-            <p className="gradient-title text-3xl">Well-Being Journal</p>
-            <p className="mt-3 text-sm text-stone-600">
-              Private reflection, mood awareness, and supportive care in one calm space.
-            </p>
-            <div className="mt-6 rounded-3xl bg-white/70 p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-stone-400">Signed in as</p>
-              <p className="mt-2 text-lg font-semibold text-stone-800">{user?.fullName}</p>
-              <p className="text-sm capitalize text-stone-500">{user?.role}</p>
-            </div>
-          </div>
-
+      <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="surface-card overflow-hidden bg-hero-glow lg:w-72 lg:min-w-72 lg:max-w-72 lg:self-start lg:sticky lg:top-4">
+          {/* <div className="app-shell-banner"> */}
+            <p className="gradient-title text-2xl">Well-Being Journal</p>
+            {/* <div className="surface-panel mt-6 rounded-3xl"> */}
+            <br />
+              <p className="theme-text-faint text-xs uppercase tracking-[0.24em] pt-3">Signed in as</p>
+              <p className="theme-text mt-2 text-lg font-semibold">{user?.fullName}</p>
+              <p className="theme-text-muted text-sm capitalize">{user?.role}</p>
+            {/* </div> */}
+        {/* </div> */}
           <nav className="mt-6 flex gap-2 overflow-x-auto pb-1 lg:block">
             {navigation.map((item) => (
               <NavLink
@@ -54,19 +57,48 @@ export function AppShell() {
                 to={item.to}
                 className={({ isActive }) =>
                   [
-                    "mb-2 inline-flex min-w-max rounded-full px-4 py-2 text-sm font-medium transition-colors lg:flex",
-                    isActive
-                      ? "bg-orange-500 text-white"
-                      : "bg-white/70 text-stone-600 hover:bg-orange-50"
+                    "nav-pill",
+                    isActive ? "nav-pill-active" : "nav-pill-idle"
                   ].join(" ")
                 }
               >
                 {item.label}
               </NavLink>
             ))}
+
+            {user?.role === "user" && user?.consentSettings?.allowHelperSharing && (
+              <NavLink
+                to="/app/feedback"
+                className={({ isActive }) =>
+                  ["nav-pill", isActive ? "nav-pill-active" : "nav-pill-idle"].join(" ")
+                }
+              >
+                Feedback
+              </NavLink>
+            )}
+
+            {needsJournal && user?.role === "user" && (
+              <div
+                className="hidden lg:block mt-2 rounded-2xl px-4 py-3 text-xs"
+                style={{
+                  background: "oklch(var(--primary-soft))",
+                  border: "1px solid oklch(var(--primary) / 0.25)"
+                }}
+              >
+                <p className="theme-text font-semibold mb-1">📓 No entry yet today</p>
+                <p className="theme-text-muted leading-5">Take a moment to reflect after your session.</p>
+                <Link
+                  to="/app/journal/new"
+                  className="mt-2 inline-block font-semibold text-xs"
+                  style={{ color: "oklch(var(--primary))" }}
+                >
+                  Write now →
+                </Link>
+              </div>
+            )}
           </nav>
 
-          <div className="mt-6 border-t border-orange-100 pt-5">
+          <div className="mt-6 border-t pt-5" style={{ borderColor: "oklch(var(--line) / 0.65)" }}>
             <button type="button" className="btn-secondary w-full" onClick={logout}>
               Log out
             </button>
@@ -76,8 +108,8 @@ export function AppShell() {
         <main className="space-y-4">
           <header className="surface-card flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-sm text-stone-500">Today’s space for reflection</p>
-              <h1 className="mt-1 text-2xl font-semibold text-stone-800">
+              <p className="theme-text-muted text-sm">Today’s space for reflection</p>
+              <h1 className="theme-text mt-1 text-2xl font-semibold">
                 {location.pathname.includes("/journal")
                   ? "Journal Editor"
                   : location.pathname.includes("/history")
@@ -88,17 +120,19 @@ export function AppShell() {
                         ? "Settings"
                         : location.pathname.includes("/admin")
                           ? "Admin Dashboard"
-                          : location.pathname.includes("/helper")
-                            ? "Helper Dashboard"
-                            : "Dashboard"}
+                          : location.pathname.includes("/breathe")
+                            ? "Breathing Exercise"
+                            : location.pathname.includes("/helper")
+                              ? "Messages"
+                              : location.pathname.includes("/feedback")
+                                ? "Helper Feedback"
+                                : user?.role === "helper"
+                                  ? "Dashboard"
+                                  : "Dashboard"}
               </h1>
-            </div>
-            <div className="badge-pill">
-              <span>Supportive tool only</span>
             </div>
           </header>
           <NotificationBar />
-          <ReminderBanner />
           <Outlet />
         </main>
       </div>
